@@ -30,13 +30,31 @@ const app = new Vue({
     	messages: []
     },
     methods: {
-    	addMessage(messages){
-    		this.messages.push(messages);
+    	addMessage(message){
+    		//add to existing messages client side immediate visibility
+    		this.messages.push(message);
+
+    		//persist to the dbase
+    		axios.post('/messages', message).then(response => {
+    			// console.log(message);
+    			//do what ever after success saved to db
+    		});
     	}
     },
     created() {
     	axios.get('/messages').then(response => {
     		this.messages = response.data;
     	});
+        Echo.join('chatroom')
+            .here()
+            .joining()
+            .leaving()
+            .listen('MessagePosted', (e) => {
+                this.messages.push({
+                    message: e.message.message,
+                    user: e.user
+                })
+            });
+
     }
 });

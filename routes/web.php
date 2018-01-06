@@ -1,5 +1,6 @@
 <?php
 
+use App\Events\MessagePosted;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -15,9 +16,21 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('messages', function(){
+Route::get('/messages', function(){
 	return App\Message::with('user')->get();
+
+});
+
+Route::post('/messages', function(){
+	$user = auth()->user();
 	
+	$message = $user->messages()->create([
+		'message' => request()->get('message')
+	]);
+
+	//Announce that a new message has been posted using the message content and the person who posted the message
+	broadcast(new MessagePosted($message, $user))->toOthers();
+	return ['status' => 'Ok!'];
 });
 
 Route::get('/chat', function(){

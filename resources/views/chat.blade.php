@@ -1,20 +1,22 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title>Chatroom</title>
-</head>
-	<link rel="stylesheet" type="text/css" href="css/app.css">
-<body>
+@extends('layouts.app')
 
-	<div id="app">
-		<h1>Chatroom</h1>
+	@section('content')
+		<div class="container">
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2">
+					<div class="panel panel-default">
 
-		<chat-log :messages="messages"></chat-log>
+						<div class="panel-heading">
+							Chatroom
+							<span class="badge">8</span>
+						</div> 
 
-		<chat-composer v-on:messagesent="addMessage"></chat-composer>
-		{{-- <chat-log></chat-log> --}}
+						<chat-log :messages="messages"></chat-log>
 
-	</div>
-	<script type="text/javascript" src="js/app.js" charset="utf-8"></script>
-</body>
-</html>
+						<chat-composer v-on:messagesent="addMessage"></chat-composer>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	@endsection
